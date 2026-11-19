@@ -517,8 +517,8 @@
                     image: "https://i.postimg.cc/fLcLhqNg/images(68).jpg", desc: "Castillo red wine."
                 },
                 {
-                    id: "w10", category: "drinks", subcat: "wine", name: "Ascoli Agor", price: 25000, badge: "Red Wine",
-                    image: "https://i.postimg.cc/sx0MQ1gq/images(69).jpg", desc: "Ascoli red wine."
+                    id: "w10", category: "drinks", subcat: "wine", name: "Asconi agor", price: 25000, badge: "Red Wine",
+                    image: "https://i.postimg.cc/sx0MQ1gq/images(69).jpg", desc: "Asconi red wine."
                 },
 
                 // SOFT DRINK & WATER & ENERGY
@@ -617,12 +617,12 @@
                     image: "https://i.postimg.cc/PqkdhqvT/jollof-spaghetti-24.jpg", desc: "Prepared spaghetti."
                 },
                 {
-                    id: "k14", category: "kitchen", name: "Cat fish body", price: 4000, badge: "Fish",
-                    image: "https://i.postimg.cc/jjrRKjnr/Nigerian-Catfish-peppersoup-warri-version.jpg", desc: "Catfish body cut."
+                    id: "k14", category: "kitchen", name: "Cat fish pepper soup (Body)", price: 4000, badge: "Fish",
+                    image: "https://i.postimg.cc/jjrRKjnr/Nigerian-Catfish-peppersoup-warri-version.jpg", desc: "Catfish pepper soup body cut."
                 },
                 {
-                    id: "k15", category: "kitchen", name: "Cat fish head", price: 5000, badge: "Fish",
-                    image: "https://i.postimg.cc/TPwW8yfb/images(84).jpg", desc: "Catfish head portion."
+                    id: "k15", category: "kitchen", name: "Cat fish pepper soup (Head)", price: 5000, badge: "Fish",
+                    image: "https://i.postimg.cc/TPwW8yfb/images(84).jpg", desc: "Catfish pepper soup head portion."
                 },
                 {
                     id: "k17", category: "kitchen", name: "Chicken vegetable", price: 6500, badge: "Soup",
@@ -899,7 +899,7 @@
                     image: "https://i.postimg.cc/BQfZ9hmS/Screenshot-20261118-164719.jpg", desc: "Stellar eau de parfum."
                 },
                 {
-                    id: "m62", category: "minimart", subcat: "biscuit", name: "Pringle", price: 5700, badge: "Snack",
+                    id: "m62", category: "minimart", subcat: "biscuit", name: "Pringles", price: 5700, badge: "Snack",
                     image: "https://i.postimg.cc/y8yHRQh9/PRINGLES.jpg", desc: "Pringles potato crisps."
                 },
                 {
@@ -941,7 +941,7 @@
             ]
         };
 
-        let menuData = JSON.parse(localStorage.getItem('jamin_gold_menu_v7')) || structuredClone(DEFAULT_DATA);
+        let menuData = JSON.parse(localStorage.getItem('jamin_gold_menu_v8')) || structuredClone(DEFAULT_DATA);
         menuData.venue.whatsapp = "2349058865533";
         let cart = JSON.parse(localStorage.getItem('jamin_gold_cart_v4')) || {};
         let activeCategory = 'home'; // 'home', 'drinks', 'kitchen', 'minimart'
@@ -980,10 +980,10 @@
         }
 
         function persistData() {
-            localStorage.setItem('jamin_gold_menu_v7', JSON.stringify(menuData));
+            localStorage.setItem('jamin_gold_menu_v8', JSON.stringify(menuData));
         }
         function persistCart() {
-            localStorage.setItem('jamin_gold_cart_v3', JSON.stringify(cart));
+            localStorage.setItem('jamin_gold_cart_v4', JSON.stringify(cart));
         }
 
         function showToast(message, type = 'gold') {
