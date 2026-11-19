@@ -949,6 +949,11 @@
         let searchQuery = '';
         let currentTheme = localStorage.getItem('jamin_gold_theme') || 'dark';
 
+        function pushNavHistory(catId, subId, modalType = null) {
+            if (!window.history || !window.history.pushState) return;
+            window.history.pushState({ catId, subId, modalType }, '', window.location.href);
+        }
+
         function setTheme(theme) {
             currentTheme = theme;
             localStorage.setItem('jamin_gold_theme', theme);
@@ -1218,27 +1223,32 @@
             lucide.createIcons();
         }
 
-        function selectCategory(catId) {
+        function selectCategory(catId, skipHistory = false) {
+            const changed = activeCategory !== catId || activeSubcat !== 'all';
             activeCategory = catId;
             activeSubcat = 'all';
+            if (!skipHistory && changed) {
+                pushNavHistory(activeCategory, activeSubcat);
+            }
             renderCategories();
             renderMenu();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function selectSubcategory(catId, subId) {
+        function selectSubcategory(catId, subId, skipHistory = false) {
+            const changed = activeCategory !== catId || activeSubcat !== subId;
             activeCategory = catId;
             activeSubcat = subId;
+            if (!skipHistory && changed) {
+                pushNavHistory(activeCategory, activeSubcat);
+            }
             renderCategories();
             renderMenu();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function jumpToCategory(catId) {
-            activeCategory = catId;
-            activeSubcat = 'all';
-            renderCategories();
-            renderMenu();
+            selectCategory(catId);
             setTimeout(() => {
                 const el = document.getElementById(`section-${catId}`);
                 if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1246,10 +1256,7 @@
         }
 
         function jumpToSubcat(catId, subId) {
-            activeCategory = catId;
-            activeSubcat = subId;
-            renderCategories();
-            renderMenu();
+            selectSubcategory(catId, subId);
             setTimeout(() => {
                 if (subId === 'all') {
                     const el = document.getElementById(`section-${catId}`);
@@ -1313,7 +1320,7 @@
                 floatingBar.classList.remove('translate-y-28', 'opacity-0', 'pointer-events-none');
             } else {
                 floatingBar.classList.add('translate-y-28', 'opacity-0', 'pointer-events-none');
-                closeCartDrawer();
+                closeCartDrawer(true);
             }
 
             const listContainer = document.getElementById('cart-items-list');
@@ -1346,10 +1353,19 @@
 
         function openCartDrawer() {
             updateCartUI();
-            document.getElementById('cart-modal').classList.remove('hidden');
+            const modal = document.getElementById('cart-modal');
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                pushNavHistory(activeCategory, activeSubcat, 'cart');
+            }
         }
-        function closeCartDrawer() {
-            document.getElementById('cart-modal').classList.add('hidden');
+        function closeCartDrawer(fromPopstate = false) {
+            const modal = document.getElementById('cart-modal');
+            if (modal.classList.contains('hidden')) return;
+            modal.classList.add('hidden');
+            if (!fromPopstate && window.history.state && window.history.state.modalType === 'cart') {
+                window.history.back();
+            }
         }
         function clearCart() {
             cart = {};
@@ -1582,6 +1598,7 @@
             const badge = document.getElementById('receipt-status-badge');
             const imgContainer = document.getElementById('receipt-image-container');
             modal.classList.remove('hidden');
+            pushNavHistory(activeCategory, activeSubcat, 'receipt');
 
             const decoded = decodeShortReceiptLink(token);
             if (!decoded || decoded.tampered) {
@@ -1602,10 +1619,14 @@
             lucide.createIcons();
         }
 
-        function closeReceiptViewer() {
-            document.getElementById('receipt-viewer-modal').classList.add('hidden');
+        function closeReceiptViewer(fromPopstate = false) {
+            const modal = document.getElementById('receipt-viewer-modal');
+            if (modal.classList.contains('hidden')) return;
+            modal.classList.add('hidden');
             if (window.history.replaceState && window.location.search.includes('r=')) {
-                window.history.replaceState({}, document.title, window.location.pathname);
+                window.history.replaceState({ catId: activeCategory, subId: activeSubcat, modalType: null }, document.title, window.location.pathname);
+            } else if (!fromPopstate && window.history.state && window.history.state.modalType === 'receipt') {
+                window.history.back();
             }
         }
 
@@ -1635,8 +1656,38 @@
             window.open(url, '_blank');
         }
 
+        window.addEventListener('popstate', (event) => {
+            const cartModal = document.getElementById('cart-modal');
+            const receiptModal = document.getElementById('receipt-viewer-modal');
+
+            if (!receiptModal.classList.contains('hidden')) {
+                closeReceiptViewer(true);
+                return;
+            }
+            if (!cartModal.classList.contains('hidden')) {
+                closeCartDrawer(true);
+                return;
+            }
+
+            const state = event.state;
+            if (state && state.catId) {
+                activeCategory = state.catId;
+                activeSubcat = state.subId || 'all';
+            } else {
+                activeCategory = 'home';
+                activeSubcat = 'all';
+            }
+            renderCategories();
+            renderMenu();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
         window.addEventListener('DOMContentLoaded', () => {
             setTheme(currentTheme);
+
+            if (window.history && window.history.replaceState) {
+                window.history.replaceState({ catId: 'home', subId: 'all', modalType: null }, '', window.location.href);
+            }
 
             const searchInput = document.getElementById('search-input');
             const clearBtn = document.getElementById('clear-search');
