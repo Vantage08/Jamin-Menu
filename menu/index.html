@@ -104,15 +104,19 @@
                 <img src="https://i.postimg.cc/DZksFvf5/Screenshot-20261116-175034.jpg" alt="Jamin Golden Hotel Logo" class="w-full h-full object-cover">
             </div>
 
-            <h1 id="venue-name" class="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">
+            <h1 id="venue-name" class="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white mb-1.5">
                 Jamin Golden Hotel
             </h1>
             <p id="venue-subtitle" class="text-sm sm:text-base text-slate-600 dark:text-slate-400 max-w-md mx-auto">
-                Explore our Drinks, Kitchen delicacies, and Mini-Mart essentials.
+                Pool Bar Menu — Drinks, Kitchen & Mini-Mart
             </p>
+            <div class="mt-2 inline-flex items-center justify-center gap-1.5 px-3 py-1 rounded-full bg-gold/10 border border-gold/25 text-xs font-medium text-gold">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 shrink-0"></i>
+                <span id="venue-address">5b Catternach Street, GRA, Enugu</span>
+            </div>
 
             <!-- Search & Filter Controls -->
-            <div class="mt-6 space-y-3">
+            <div class="mt-5 space-y-3">
                 <div class="relative max-w-lg mx-auto">
                     <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
                     <input 
@@ -174,7 +178,8 @@
     </main>
 
     <!-- Footer -->
-    <footer class="max-w-3xl w-full mx-auto px-4 sm:px-6 mt-12 pt-6 border-t border-white/10 dark:border-white/10 light:border-slate-200 text-center text-xs text-slate-500">
+    <footer class="max-w-3xl w-full mx-auto px-4 sm:px-6 mt-12 pt-6 border-t border-white/10 dark:border-white/10 light:border-slate-200 text-center text-xs text-slate-500 space-y-1">
+        <p id="footer-address-text" class="text-slate-600 dark:text-slate-400 font-medium">5b Catternach Street, GRA, Enugu</p>
         <p id="footer-venue-text">© 2026 Jamin Golden Hotel. Prices in Nigerian Naira (₦).</p>
     </footer>
 
@@ -287,6 +292,7 @@
             venue: {
                 name: "Jamin Golden Hotel",
                 subtitle: "Pool Bar Menu — Drinks, Kitchen & Mini-Mart",
+                address: "5b Catternach Street, GRA, Enugu",
                 whatsapp: "2349058865533"
             },
             categories: [
@@ -642,7 +648,7 @@
                 },
                 {
                     id: "k20", category: "kitchen", name: "Takeaway pack", price: 300, badge: "Packing",
-                    image: "https://i.postimg.cc/pdpfBcr3/images(43).jpg", desc: "Takeaway food container."
+                    image: "https://i.postimg.cc/MZMWhyDJ/Food-Grade-Black-PP-Microwavable-Takeaway-Container-for-Food-Packaging.jpg", desc: "Takeaway food container."
                 },
 
                 // Mini-Mart Items
@@ -941,8 +947,9 @@
             ]
         };
 
-        let menuData = JSON.parse(localStorage.getItem('jamin_gold_menu_v8')) || structuredClone(DEFAULT_DATA);
+        let menuData = JSON.parse(localStorage.getItem('jamin_gold_menu_v10')) || structuredClone(DEFAULT_DATA);
         menuData.venue.whatsapp = "2349058865533";
+        menuData.venue.address = "5b Catternach Street, GRA, Enugu";
         let cart = JSON.parse(localStorage.getItem('jamin_gold_cart_v4')) || {};
         let activeCategory = 'home'; // 'home', 'drinks', 'kitchen', 'minimart'
         let activeSubcat = 'all';    // 'all' or specific subcat ID
@@ -980,7 +987,7 @@
         }
 
         function persistData() {
-            localStorage.setItem('jamin_gold_menu_v8', JSON.stringify(menuData));
+            localStorage.setItem('jamin_gold_menu_v10', JSON.stringify(menuData));
         }
         function persistCart() {
             localStorage.setItem('jamin_gold_cart_v4', JSON.stringify(cart));
@@ -1002,6 +1009,8 @@
         function renderVenueInfo() {
             document.getElementById('venue-name').textContent = menuData.venue.name;
             document.getElementById('venue-subtitle').textContent = menuData.venue.subtitle;
+            document.getElementById('venue-address').textContent = menuData.venue.address;
+            document.getElementById('footer-address-text').textContent = menuData.venue.address;
             document.getElementById('footer-venue-text').textContent = `© ${new Date().getFullYear()} ${menuData.venue.name}. Prices in Nigerian Naira (₦).`;
             document.title = `${menuData.venue.name} — Digital Menu`;
         }
@@ -1458,7 +1467,7 @@
             const canvas = document.createElement('canvas');
             const width = 640;
             const lineHeight = 46;
-            const height = 430 + (data.lines.length * lineHeight);
+            const height = 450 + (data.lines.length * lineHeight);
             canvas.width = width;
             canvas.height = height;
             const ctx = canvas.getContext('2d');
@@ -1469,9 +1478,9 @@
 
             // Top Gold Header Banner
             ctx.fillStyle = '#0f0f11';
-            ctx.fillRect(0, 0, width, 165);
+            ctx.fillRect(0, 0, width, 185);
             ctx.fillStyle = '#d4af37';
-            ctx.fillRect(0, 160, width, 5);
+            ctx.fillRect(0, 180, width, 5);
 
             const drawBody = () => {
                 ctx.textAlign = 'center';
@@ -1479,31 +1488,35 @@
                 ctx.font = 'bold 24px Georgia, serif';
                 ctx.fillText('JAMIN GOLDEN HOTEL', width / 2, 118);
 
-                ctx.fillStyle = '#cbd5e1';
-                ctx.font = '600 13px Inter, sans-serif';
-                ctx.fillText('OFFICIAL LOCKED ORDER RECEIPT', width / 2, 142);
+                ctx.fillStyle = '#e2e8f0';
+                ctx.font = '500 13px Inter, sans-serif';
+                ctx.fillText('5b Catternach Street, GRA, Enugu', width / 2, 140);
+
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '600 12px Inter, sans-serif';
+                ctx.fillText('OFFICIAL LOCKED ORDER RECEIPT', width / 2, 164);
 
                 // Metadata Section
                 ctx.textAlign = 'left';
                 ctx.fillStyle = '#1e293b';
                 ctx.font = 'bold 16px Inter, sans-serif';
-                ctx.fillText(`Order ID: ${data.orderId}`, 36, 202);
-                ctx.fillText(`Location: ${data.tableNo}`, 36, 228);
+                ctx.fillText(`Order ID: ${data.orderId}`, 36, 222);
+                ctx.fillText(`Location: ${data.tableNo}`, 36, 248);
 
                 ctx.textAlign = 'right';
                 ctx.fillStyle = '#64748b';
                 ctx.font = '14px Inter, sans-serif';
                 const dateStr = data.timestamp.toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' });
                 const timeStr = data.timestamp.toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' });
-                ctx.fillText(dateStr, width - 36, 202);
-                ctx.fillText(timeStr, width - 36, 228);
+                ctx.fillText(dateStr, width - 36, 222);
+                ctx.fillText(timeStr, width - 36, 248);
 
                 // Divider
                 ctx.strokeStyle = '#cbd5e1';
                 ctx.setLineDash([6, 4]);
                 ctx.beginPath();
-                ctx.moveTo(36, 248);
-                ctx.lineTo(width - 36, 248);
+                ctx.moveTo(36, 268);
+                ctx.lineTo(width - 36, 268);
                 ctx.stroke();
                 ctx.setLineDash([]);
 
@@ -1511,12 +1524,12 @@
                 ctx.textAlign = 'left';
                 ctx.fillStyle = '#64748b';
                 ctx.font = 'bold 12px Inter, sans-serif';
-                ctx.fillText('QTY & ITEM', 36, 274);
+                ctx.fillText('QTY & ITEM', 36, 294);
                 ctx.textAlign = 'right';
-                ctx.fillText('OFFICIAL AMOUNT', width - 36, 274);
+                ctx.fillText('OFFICIAL AMOUNT', width - 36, 294);
 
                 // Items
-                let y = 310;
+                let y = 330;
                 data.lines.forEach(({ item, qty, subtotal }) => {
                     ctx.textAlign = 'left';
                     ctx.fillStyle = '#0f172a';
